@@ -1,6 +1,11 @@
 let isScrolling = false;
+let profileDetail1 = document.getElementById('profileDetail1');
+let profileDetail2 = document.getElementById('profileDetail2');
+let profileDetail3 = document.getElementById('profileDetail3');
+let contentChanged = false; 
+let typingInProgress = false; 
 
-// 스크롤 자동 내려감 애니메이션
+// Function to scroll smoothly
 function scrollToSection(direction) {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
     const viewportHeight = window.innerHeight;
@@ -24,47 +29,72 @@ function scrollToSection(direction) {
     }, 1000);
 }
 
-// 배경 그라데이션 흐려짐 애니메이션
-function updateBackgroundGradient() {
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-    const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercentage = scrollPosition / documentHeight;
 
-    const startColor = [100, 153, 233]; 
-    const endColor = [255, 255, 255]; 
-    const currentColor = startColor.map((start, index) => {
-        const end = endColor[index];
-        const current = start + (end - start) * scrollPercentage;
-        return Math.round(current);
-    });
-
-    const currentColorString = `rgb(${currentColor.join(',')})`;
-
-    if (scrollPosition > 0) {
-        document.body.style.background = `linear-gradient(to bottom, ${currentColorString}, white)`;
-    } else {
-        document.body.style.background = `rgb(${startColor.join(',')})`;
+// Function for typing effect with callback
+function typeWriter(element, text, callback) {
+    let i = 0;
+    typingInProgress = true;
+    
+    function typing() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, 100);
+        } else {
+            typingInProgress = false;
+            if (callback) {
+                callback();
+            }
+        }
     }
+    
+    element.innerHTML = ''; // Clear existing content
+    typing(); // Start typing effect
 }
 
-// 스크롤 효과 적용
+// Function to change profile detail content
+function changeProfileDetailContent() {
+    if (typingInProgress) return; // If typing is already in progress, return
+    
+    const newContent1 = '이름 : 최지설';
+    const newContent2 = '생일 : 2006년 07월 31일';
+    const newContent3 = '전화번호 : 010-6593-0730';
+
+    // Type each content sequentially
+    typeWriter(profileDetail1, newContent1, () => {
+        typeWriter(profileDetail2, newContent2, () => {
+            typeWriter(profileDetail3, newContent3, () => {
+                contentChanged = true; 
+            });
+        });
+    });
+}
+
+// Event listener for mouse wheel scroll
 window.addEventListener('wheel', function(event) {
     event.preventDefault();
     if (event.deltaY > 0) {
-        scrollToSection('down');
+        if (!contentChanged) {
+            changeProfileDetailContent();
+        } else {
+            scrollToSection('down');
+        }
     } else {
         scrollToSection('up');
     }
 }, { passive: false });
 
+// Event listener for keyboard arrow keys
 window.addEventListener('keydown', function(event) {
     if (event.key === "ArrowDown") {
         event.preventDefault();
-        scrollToSection('down');
+        if (!contentChanged) {
+            changeProfileDetailContent();
+        } else {
+            scrollToSection('down');
+        }
     } else if (event.key === "ArrowUp") {
         event.preventDefault();
         scrollToSection('up');
     }
 }, { passive: false });
-
-window.addEventListener('scroll', updateBackgroundGradient);
