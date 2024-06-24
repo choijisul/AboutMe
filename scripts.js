@@ -2,8 +2,8 @@ let isScrolling = false;
 let profileDetail1 = document.getElementById('profileDetail1');
 let profileDetail2 = document.getElementById('profileDetail2');
 let profileDetail3 = document.getElementById('profileDetail3');
-let contentChanged = false; 
-let typingInProgress = false; 
+let contentChanged = false;
+let typingInProgress = false;
 
 // Function to scroll smoothly
 function scrollToSection(direction) {
@@ -29,12 +29,11 @@ function scrollToSection(direction) {
     }, 1000);
 }
 
-
 // Function for typing effect with callback
 function typeWriter(element, text, callback) {
     let i = 0;
     typingInProgress = true;
-    
+
     function typing() {
         if (i < text.length) {
             element.innerHTML += text.charAt(i);
@@ -47,7 +46,7 @@ function typeWriter(element, text, callback) {
             }
         }
     }
-    
+
     element.innerHTML = ''; // Clear existing content
     typing(); // Start typing effect
 }
@@ -55,7 +54,7 @@ function typeWriter(element, text, callback) {
 // Function to change profile detail content
 function changeProfileDetailContent() {
     if (typingInProgress) return; // If typing is already in progress, return
-    
+
     const newContent1 = '이름 : 최지설';
     const newContent2 = '생일 : 2006년 07월 31일';
     const newContent3 = '전화번호 : 010-6593-0730';
@@ -64,14 +63,14 @@ function changeProfileDetailContent() {
     typeWriter(profileDetail1, newContent1, () => {
         typeWriter(profileDetail2, newContent2, () => {
             typeWriter(profileDetail3, newContent3, () => {
-                contentChanged = true; 
+                contentChanged = true;
             });
         });
     });
 }
 
 // Event listener for mouse wheel scroll
-window.addEventListener('wheel', function(event) {
+window.addEventListener('wheel', function (event) {
     event.preventDefault();
     if (event.deltaY > 0) {
         if (!contentChanged) {
@@ -85,7 +84,7 @@ window.addEventListener('wheel', function(event) {
 }, { passive: false });
 
 // Event listener for keyboard arrow keys
-window.addEventListener('keydown', function(event) {
+window.addEventListener('keydown', function (event) {
     if (event.key === "ArrowDown") {
         event.preventDefault();
         if (!contentChanged) {
@@ -98,3 +97,17 @@ window.addEventListener('keydown', function(event) {
         scrollToSection('up');
     }
 }, { passive: false });
+
+// skill 올라오는 애니메이션
+function handleScroll() {
+    const section2 = document.getElementById('section2');
+    const sectionTop = section2.getBoundingClientRect().top;
+    const triggerPoint = window.innerHeight / 2;
+    if (sectionTop < triggerPoint && sectionTop > -section2.offsetHeight) {
+        section2.classList.add('show');
+    } else {
+        section2.classList.remove('show');
+    }
+}
+
+window.addEventListener('scroll', handleScroll);

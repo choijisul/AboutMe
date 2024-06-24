@@ -88,3 +88,56 @@ p {
     text-align: left;
     padding-left: 35px;
 }
+
+/* 스킬셋 */
+
+.skill-section {
+    margin-top: 30px;
+    position: relative;
+    margin-left: 8%;
+    width: 80%;
+    height: 55vh;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box; 
+}
+
+.skill-section1,
+.skill-section2,
+.skill-section3,
+.skill-section4 {
+    width: 21%;
+    margin-right: 2%;
+    height: 100%;
+    border: 2px solid #6078BA;
+    box-sizing: border-box; 
+}
+
+.skill-sub-title{
+    margin-left: 30%;
+    margin-top: 20px;
+    color: #000000;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.skill-icon{
+    width: 32%;
+    height: auto;
+    margin-left: 25px;
+    margin-top: 20px;
+}
+
+/* 애니메이션 초기 상태 */
+#section2 * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* 애니메이션 효과가 추가된 상태 */
+#section2.show * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
